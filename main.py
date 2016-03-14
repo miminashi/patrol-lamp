@@ -3,6 +3,8 @@ import mraa
 import yaml
 import paho.mqtt.client as mqtt
 
+CA_CERTS_FILE = "/etc/ssl/certs/ca-certificates.crt"
+
 with open(".env.example", "r") as f:
     dic = yaml.load(f)
     HOST = dic.get("HOST")
@@ -26,9 +28,10 @@ def on_message(client, userdata, msg):
 
 
 if __name__ == '__main__':
-    client = mqtt.Client()
+    client = mqtt.Client(protocol=mqtt.MQTTv311)
     client.on_connect = on_connect
     client.on_message = on_message
+    client.tls_set(CA_CERTS_FILE)
     client.username_pw_set(USERNAME, PASSWORD)
     client.connect(HOST, PORT, 60)
     client.loop_forever()
