@@ -15,7 +15,7 @@ gpio.dir(mraa.DIR_OUT)
 
 def on_connect(client, userdata, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("test/led")
+    client.subscribe("honban/pat-lamp")
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
