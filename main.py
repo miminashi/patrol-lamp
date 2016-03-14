@@ -20,12 +20,9 @@ def on_connect(client, userdata, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
   
-    for unuse in range(5):
-        gpio.write(1)
-        time.sleep(0.1)
-
-        gpio.write(0)
-        time.sleep(0.9)
+    gpio.write(1)
+    time.sleep(3)
+    gpio.write(0)
 
 
 if __name__ == '__main__':
