@@ -3,7 +3,7 @@ import mraa
 import yaml
 import paho.mqtt.client as mqtt
 
-with open(".env", "r") as f:
+with open(".env.example", "r") as f:
     dic = yaml.load(f)
     HOST = dic.get("HOST")
     PORT = dic.get("PORT")
