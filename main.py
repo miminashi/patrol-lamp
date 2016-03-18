@@ -1,5 +1,6 @@
 import time
 import datetime
+import traceback
 import mraa
 from twitter import *
 
@@ -15,11 +16,25 @@ print "hello"
 gpio = mraa.Gpio(13)
 gpio.dir(mraa.DIR_OUT)
 
+gpio.write(1)
+time.sleep(1.0)
+gpio.write(0)
+
 auth = OAuth(ACCESS_TOKEN, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
+
 
 t = Twitter(auth=auth)
 message = "AC Control Box started at " + str(datetime.datetime.now())
-t.statuses.update(status=message)
+
+while True:
+    try:
+        t.statuses.update(status=message)
+        print "Tweeted!"
+        break
+    except Exception as e:
+        #print "Twitter error({0}): {1}".format(e.errno, e.strerror)
+        print traceback.format_exc()
+        time.sleep(1.0)
 
 twitter_stream = TwitterStream(auth=auth, domain="userstream.twitter.com")
 for msg in twitter_stream.user():
@@ -28,7 +43,7 @@ for msg in twitter_stream.user():
             print msg["text"]
             for i in xrange(3):
                 gpio.write(1)
-                time.sleep(1.0)
+                time.sleep(0.2)
                 gpio.write(0)
-                time.sleep(0.5)
+                time.sleep(0.2)
 
