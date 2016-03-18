@@ -1,4 +1,5 @@
 import time
+import datetime
 import mraa
 from twitter import *
 
@@ -9,11 +10,17 @@ ACCESS_TOKEN_SECRET = "l9XVYNB2tfO4duRqITXa4ZhKYw4fS9fCkvvfz2XtgbX6G"
 SCREEN_NAME = "isaac_iot"
 
 print "hello"
+#raise Exception('spam', 'eggs')
 
 gpio = mraa.Gpio(13)
 gpio.dir(mraa.DIR_OUT)
 
 auth = OAuth(ACCESS_TOKEN, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
+
+t = Twitter(auth=auth)
+message = "AC Control Box started at " + str(datetime.datetime.now())
+t.statuses.update(status=message)
+
 twitter_stream = TwitterStream(auth=auth, domain="userstream.twitter.com")
 for msg in twitter_stream.user():
     if "in_reply_to_screen_name" in msg and "text" in msg:
